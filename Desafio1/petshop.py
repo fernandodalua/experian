@@ -60,9 +60,9 @@ class PetShop(threading.Thread):
                         }
                     csvfile = open('petshop.csv', 'a', newline='')
                     writer = csv.DictWriter(csvfile, fieldnames=fieldnames, delimiter=';')
-                    writer.writerow(row)
-                print('Acessando a página: ' + str(pages))
+                    writer.writerow(row)                
                 pages = pages + 1
+                print('Acessando a página: ' + str(pages))
                 
         except Exception as e:
             print('Erro na aplicação: '+str(e))
