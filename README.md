@@ -4,5 +4,5 @@
 ### • Desafio 2 - Comparar 2 arquivos 
 
 ####	**Para executar**
-		compara_arquivos.py _arquivo1.csv_ _arquivo2.csv_ 
+		compara_arquivos.py *arquivo1.csv* *arquivo2.csv* 
 
