@@ -1,5 +1,4 @@
 import threading, time, csv
-from urllib.request import Request, urlopen
 from bs4 import BeautifulSoup
 from selenium import webdriver
 
@@ -33,18 +32,19 @@ class PetShop(threading.Thread):
                             nome = value
                         if(key == 'href'):                                                    
                             descricao = value
+                            descricao = descricao.replace('//www', 'http://www')
                             
                             #TRECHO RESPONSÁVEL POR ENTRAR NAS PÁGINAS PARA CAPTURAR OS DETALHES DO PRODUTO
+ 
+                            driver2 = webdriver.Chrome()                            
+                            driver2.get(descricao)                            
+                            details = driver2.find_element_by_class_name('detalhesProduto')
+                            detailsHtml = details.get_attribute('innerHTML')
+                            detailsSoup = BeautifulSoup(detailsHtml, 'html.parser')                        
+                            descriptions = detailsSoup.find_all('div', {'class': 'descricao'})
+                            descricao = descriptions
                             
-                            #self.driver.get(value)
-                            #details = self.driver.find_element_by_class_name('detalhesProduto')
-                            #detailsHtml = details.get_attribute('innerHTML')
-                            #detailsSoup = BeautifulSoup(detailsHtml, 'html.parser')                        
-                            #descriptions = detailsSoup.find_all('div', {'class': 'descricao'})
-                            #print(descriptions)
-                            #for tag in descriptions:
-                            #    p = tag.find_all('p')
-                            #    print(p)                        
+                    driver2.quit()
                         
                     cod = tag.find_all('div', {'class': 'yv-review-quickreview'})[0].attrs                
                     for key, value in cod.items():
@@ -56,7 +56,7 @@ class PetShop(threading.Thread):
                             "Nome": nome,
                             "Cod": int(codigo),
                             "Preco": preco,
-                            "Detalhes": descricao.replace('//www', 'http://www')
+                            "Detalhes": descricao
                         }
                     csvfile = open('petshop.csv', 'a', newline='')
                     writer = csv.DictWriter(csvfile, fieldnames=fieldnames, delimiter=';')
